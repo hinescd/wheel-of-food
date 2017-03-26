@@ -1,14 +1,19 @@
 package com.github.hinescd.wheelOfFood;
 
+import java.util.Map;
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 
@@ -16,10 +21,32 @@ import org.springframework.web.client.RestTemplate;
 @SpringBootApplication
 public class Application {
 	
-	@RequestMapping("/")
+	@RequestMapping(value="/search", method=RequestMethod.GET, produces="application/json")
 	@ResponseBody
-	public String home() {
-		return null;
+	public SearchResults home(@RequestParam Map<String, String> parameterMap) {
+		
+		if(!parameterMap.containsKey("location") && (!parameterMap.containsKey("longitude") || !parameterMap.containsKey("latitude"))) {
+			return null;
+		}
+		
+		AccessToken accessToken = getAccessToken();
+		
+		HttpHeaders headers = new HttpHeaders();
+		headers.add("Authorization", accessToken.getTokenType() + " " + accessToken.getAccessToken());
+		
+		String url = "https://api.yelp.com/v3/businesses/search?";
+		for(String key : parameterMap.keySet()) {
+			url += key + "=" + parameterMap.get(key) + "&";
+		}
+		url = url.substring(0, url.length() - 1);
+		
+		HttpEntity<Object> requestEntity = new HttpEntity<Object>(headers);
+		
+		RestTemplate restTemplate = new RestTemplate();
+		
+		SearchResults request = restTemplate.exchange(url, HttpMethod.GET, requestEntity, SearchResults.class).getBody();
+		
+		return request;
 	}
 
 	public static void main(String[] args) {
