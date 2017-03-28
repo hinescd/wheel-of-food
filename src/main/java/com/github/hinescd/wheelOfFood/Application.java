@@ -21,11 +21,6 @@ import org.springframework.web.client.RestTemplate;
 @SpringBootApplication
 public class Application {
 	
-	@RequestMapping("/")
-	public String index() {
-		return "index.html";
-	}
-	
 	@RequestMapping(value="/search", method=RequestMethod.GET, produces="application/json")
 	@ResponseBody
 	public SearchResults search(@RequestParam Map<String, String> parameterMap) {
