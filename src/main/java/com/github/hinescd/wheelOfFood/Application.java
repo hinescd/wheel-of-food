@@ -21,9 +21,14 @@ import org.springframework.web.client.RestTemplate;
 @SpringBootApplication
 public class Application {
 	
+	@RequestMapping("/")
+	public String index() {
+		return "index.html";
+	}
+	
 	@RequestMapping(value="/search", method=RequestMethod.GET, produces="application/json")
 	@ResponseBody
-	public SearchResults home(@RequestParam Map<String, String> parameterMap) {
+	public SearchResults search(@RequestParam Map<String, String> parameterMap) {
 		
 		if(!parameterMap.containsKey("location") && (!parameterMap.containsKey("longitude") || !parameterMap.containsKey("latitude"))) {
 			return null;
