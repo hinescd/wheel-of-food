@@ -22,7 +22,6 @@ function search() {
 function drawSpinner(timestamp) {
   context.clearRect(0, 0, 500, 500);
   context.rotate(angularVelocity/60);
-  console.log("Doing stuff" + angularVelocity);
   for(var i = 0; i < displayNames.length; i++) {
     context.fillStyle = colors[i % colors.length];
     context.beginPath();
@@ -42,7 +41,6 @@ function drawSpinner(timestamp) {
   var nextFrame = window.requestAnimationFrame(drawSpinner);
   if(angularVelocity <= 0) {
     window.cancelAnimationFrame(nextFrame);
-    console.log("Done");
   }
 }
 
@@ -76,7 +74,6 @@ function initSpinner() {
 function processResults(results) {
   // Parse the JSON response
   allBusinesses = JSON.parse(results).businesses;
-  console.log(allBusinesses);
   
   // Copy contents of allBusinesses to spinnerBusinesses
   spinnerBusinesses = allBusinesses.slice();
@@ -85,7 +82,6 @@ function processResults(results) {
   while(spinnerBusinesses.length > 10) {
     spinnerBusinesses.splice(Math.floor(Math.random() * spinnerBusinesses.length), 1);
   }
-  console.log(spinnerBusinesses);
   
   initSpinner();
 }
