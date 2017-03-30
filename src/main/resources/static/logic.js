@@ -7,7 +7,7 @@ var angularVelocity;
 var angularAcceleration;
 var canvas;
 var context;
-var colors = ["#0080ff", "#00ff00", "#00ffff", "#ff0000", "#ff00ff"]
+var colors = ["#0080ff", "#00ff00", "#00ffff", "#ff0000", "#ff00ff"];
 
 function reset() {
   rotation = 0;
@@ -20,6 +20,8 @@ function init() {
   context = canvas.getContext("2d");
   context.font = "24px sans-serif";
   reset();
+  spinning = false;
+  document.getElementById("spinButton").disabled="true";
   context.fillText("Nothing to display", 250, 250);
 }
 
@@ -34,6 +36,8 @@ function search() {
   xmlHttp.send(null);
   reset();
   context.fillText("Loading...", 250, 250);
+  document.getElementById("searchButton").disabled="true";
+  document.getElementById("spinButton").disabled="true";
 }
 
 function getSelectedBusiness() {
@@ -41,6 +45,8 @@ function getSelectedBusiness() {
 }
 
 function spin() {
+  document.getElementById("spinButton").disabled="true";
+  document.getElementById("searchButton").disabled="true";
   angularVelocity = 10 + Math.random() * 25;
   angularAcceleration = -1;
   window.requestAnimationFrame(drawSpinner);
@@ -69,6 +75,8 @@ function drawSpinner(timestamp) {
   var nextFrame = window.requestAnimationFrame(drawSpinner);
   if(angularVelocity <= 0) {
     window.cancelAnimationFrame(nextFrame);
+    document.getElementById("spinButton").removeAttribute("disabled");
+    document.getElementById("searchButton").removeAttribute("disabled");
     //console.log(spinnerBusinesses[(spinnerBusinesses.length - Math.round(spinnerBusinesses.length*(rotation % (2*Math.PI))/(2*Math.PI))) % spinnerBusinesses.length].name);
     console.log(getSelectedBusiness());
   }
