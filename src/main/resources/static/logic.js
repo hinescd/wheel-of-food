@@ -2,6 +2,7 @@ var url = "search?latitude=38.431506999999996&longitude=-78.86769&term=food&radi
 var allBusinesses;
 var spinnerBusinesses;
 var displayNames;
+var rotation = 0;
 var angularVelocity;
 var angularAcceleration;
 var canvas;
@@ -13,15 +14,31 @@ function search() {
   xmlHttp.onreadystatechange = function() {
     if(xmlHttp.readyState == 4 && xmlHttp.status == 200) {
       processResults(xmlHttp.responseText);
+    } else {
+      canvas = document.getElementById("cvs");
+      context = canvas.getContext("2d");
+      context.clearRect(0, 0, 500, 500);
+      context.fillText("Loading...", 250, 250);
     }
   };
   xmlHttp.open("GET", url, true);
   xmlHttp.send(null);
 }
 
+function getSelectedBusiness() {
+  return spinnerBusinesses[(spinnerBusinesses.length - Math.round(spinnerBusinesses.length*(rotation % (2*Math.PI))/(2*Math.PI))) % spinnerBusinesses.length];
+}
+
+function spin() {
+  angularVelocity = 10 + Math.random() * 25;
+  angularAcceleration = -1;
+  window.requestAnimationFrame(drawSpinner);
+}
+
 function drawSpinner(timestamp) {
   context.clearRect(0, 0, 500, 500);
   context.rotate(angularVelocity/60);
+  rotation += angularVelocity/60;
   for(var i = 0; i < displayNames.length; i++) {
     context.fillStyle = colors[i % colors.length];
     context.beginPath();
@@ -41,6 +58,8 @@ function drawSpinner(timestamp) {
   var nextFrame = window.requestAnimationFrame(drawSpinner);
   if(angularVelocity <= 0) {
     window.cancelAnimationFrame(nextFrame);
+    //console.log(spinnerBusinesses[(spinnerBusinesses.length - Math.round(spinnerBusinesses.length*(rotation % (2*Math.PI))/(2*Math.PI))) % spinnerBusinesses.length].name);
+    console.log(getSelectedBusiness());
   }
 }
 
@@ -51,8 +70,6 @@ function initSpinner() {
   context.font = "24px sans-serif";
   
   if(spinnerBusinesses.length > 0) {
-    angularVelocity = 20;
-    angularAcceleration = -1;
     displayNames = [];
     for(var i = 0; i < spinnerBusinesses.length; i++) {
       var name = spinnerBusinesses[i].name;
@@ -63,7 +80,8 @@ function initSpinner() {
       }
       displayNames[i] = name;
     }
-    window.requestAnimationFrame(drawSpinner);
+    
+    spin();
   } else {
     var errorText = "No matches found";
     var width = context.measureText(errorText).width;
