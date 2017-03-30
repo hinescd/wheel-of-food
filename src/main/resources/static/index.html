@@ -3,8 +3,34 @@
 	<head>
 		<title>Wheel of Food</title>
 		<script src="logic.js"></script>
+		<link rel="stylesheet" type="text/css" href="css.css">
 	</head>
 	<body onload="init()">
+	  <div id="sidebar">
+	    <div id="search">
+  	    Location:<br />
+  	    <input type="checkbox" name="useCurrentLocation" id="useCurrentLocation" checked /><label for="useCurrentLocation">Current location</label>
+  	    <br />
+  	    <input type="text" name="location" id="location" placeholder="city, state" />
+  	    <br />
+  	    <br />
+  	    Radius (miles):<br />
+  	    <input type="number" name="radius" id="radius" min="0" />
+  	    <br />
+  	    <br />
+  	    Price:<br />
+  	    <input type="checkbox" name="priceOne" id="priceOne" /><label for="priceOne">$</label>
+  	    <br />
+  	    <input type="checkbox" name="priceTwo" id="priceTwo" /><label for="priceTwo">$$</label>
+  	    <br />
+  	    <input type="checkbox" name="priceThree" id="priceThree" /><label for="priceThree">$$$</label>
+  	    <br />
+  	    <input type="checkbox" name="priceFour" id="priceFour" /><label for="priceFour">$$$$</label>
+  	    <br />
+  	    <br />
+  	    <input type="checkbox" name="openNow" id="openNow" checked /><label for="openNow">Open now</label>
+  	   </div>
+	  </div>
 		<canvas id="cvs" width="500" height="500"></canvas>
 		<button id="spinButton" onclick="spin()">Spin again</button>
 		<button id="searchButton" onclick="search()">Search</button>

@@ -1,4 +1,3 @@
-var url = "search?latitude=38.431506999999996&longitude=-78.86769&term=food&radius=3218";
 var allBusinesses;
 var spinnerBusinesses;
 var displayNames;
@@ -7,7 +6,12 @@ var angularVelocity;
 var angularAcceleration;
 var canvas;
 var context;
+var loc;
 var colors = ["#0080ff", "#00ff00", "#00ffff", "#ff0000", "#ff00ff"];
+
+function setLocation(position) {
+  loc = position;
+}
 
 function reset() {
   rotation = 0;
@@ -23,9 +27,53 @@ function init() {
   spinning = false;
   document.getElementById("spinButton").disabled="true";
   context.fillText("Nothing to display", 250, 250);
+  if(navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(setLocation);
+  }
 }
 
 function search() {
+  var url = "/search";
+  if(document.getElementById("useCurrentLocation").checked) {
+    if(loc === undefined) {
+      alert("Cannot access location");
+      return;
+    } else {
+      url += "?latitude=" + loc.coords.latitude;
+      url += "&longitude=" + loc.coords.longitude;
+    }
+  } else {
+    if(document.getElementById("location").value !== "") {
+      url += "?location=" + document.getElementById("location").value;
+    } else {
+      alert("No location specified");
+      return;
+    }
+  }
+  if(document.getElementById("radius").value !== "") {
+    url += "&radius=" + (parseInt(document.getElementById("radius").value) * 1609);
+  }
+  if(document.getElementById("openNow").checked) {
+    url += "&open_now=true";
+  }
+  
+  var prices = [];
+  if(document.getElementById("priceOne").checked) {
+    prices.push(1);
+  }
+  if(document.getElementById("priceTwo").checked) {
+    prices.push(2);
+  }
+  if(document.getElementById("priceThree").checked) {
+    prices.push(3);
+  }
+  if(document.getElementById("priceFour").checked) {
+    prices.push(4);
+  }
+  if(prices.length > 0) {
+    url += "&price=" + prices.toString();
+  }
+  
   var xmlHttp = new XMLHttpRequest();
   xmlHttp.onreadystatechange = function() {
     if(xmlHttp.readyState == 4 && xmlHttp.status == 200) {
@@ -41,7 +89,7 @@ function search() {
 }
 
 function getSelectedBusiness() {
-  return spinnerBusinesses[(spinnerBusinesses.length - Math.round(spinnerBusinesses.length*(rotation % (2*Math.PI))/(2*Math.PI))) % spinnerBusinesses.length];
+  return spinnerBusinesses[(spinnerBusinesses.length - Math.round(spinnerBusinesses.length*((rotation) % (2*Math.PI))/(2*Math.PI))) % spinnerBusinesses.length];
 }
 
 function spin() {
@@ -103,6 +151,7 @@ function initSpinner() {
     var errorText = "No matches found";
     var width = context.measureText(errorText).width;
     context.fillText(errorText, -width/2, 10);
+    document.getElementById("searchButton").removeAttribute("disabled");
   }
 }
 

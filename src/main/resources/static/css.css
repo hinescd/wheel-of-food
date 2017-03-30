@@ -1,0 +1,15 @@
+canvas {
+  -float:right;
+  margin-right: auto;
+}
+
+#search {
+  margin: 10px;
+}
+
+#sidebar {
+  float:left;
+  width: 25vw;
+  height: 98vh;
+  background-color: #00ff80;
+}
