@@ -9,20 +9,31 @@ var canvas;
 var context;
 var colors = ["#0080ff", "#00ff00", "#00ffff", "#ff0000", "#ff00ff"]
 
+function reset() {
+  rotation = 0;
+  context.resetTransform();
+  context.clearRect(0, 0, 500, 500);
+}
+
+function init() {
+  canvas = document.getElementById("cvs");
+  context = canvas.getContext("2d");
+  context.font = "24px sans-serif";
+  reset();
+  context.fillText("Nothing to display", 250, 250);
+}
+
 function search() {
   var xmlHttp = new XMLHttpRequest();
   xmlHttp.onreadystatechange = function() {
     if(xmlHttp.readyState == 4 && xmlHttp.status == 200) {
       processResults(xmlHttp.responseText);
-    } else {
-      canvas = document.getElementById("cvs");
-      context = canvas.getContext("2d");
-      context.clearRect(0, 0, 500, 500);
-      context.fillText("Loading...", 250, 250);
     }
   };
   xmlHttp.open("GET", url, true);
   xmlHttp.send(null);
+  reset();
+  context.fillText("Loading...", 250, 250);
 }
 
 function getSelectedBusiness() {
@@ -64,10 +75,8 @@ function drawSpinner(timestamp) {
 }
 
 function initSpinner() {
-  canvas = document.getElementById("cvs");
-  context = canvas.getContext("2d");
+  reset();
   context.translate(250, 250);
-  context.font = "24px sans-serif";
   
   if(spinnerBusinesses.length > 0) {
     displayNames = [];
