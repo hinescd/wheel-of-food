@@ -1,5 +1,6 @@
 package com.github.hinescd.wheelOfFood;
 
+import java.util.ArrayList;
 import java.util.Map;
 
 import org.springframework.boot.SpringApplication;
@@ -23,7 +24,7 @@ public class Application {
 	
 	@RequestMapping(value="/search", method=RequestMethod.GET, produces="application/json")
 	@ResponseBody
-	public SearchResults search(@RequestParam Map<String, String> parameterMap) {
+	public ArrayList<Business> search(@RequestParam Map<String, String> parameterMap) {
 		
 		if(!parameterMap.containsKey("location") && (!parameterMap.containsKey("longitude") || !parameterMap.containsKey("latitude"))) {
 			return null;
@@ -46,7 +47,7 @@ public class Application {
 		
 		SearchResults request = restTemplate.exchange(url, HttpMethod.GET, requestEntity, SearchResults.class).getBody();
 		
-		return request;
+		return request.getBusinesses();
 	}
 
 	public static void main(String[] args) {

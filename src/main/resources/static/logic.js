@@ -161,7 +161,7 @@ function initSpinner() {
 
 function processResults(results) {
   // Parse the JSON response
-  allBusinesses = JSON.parse(results).businesses;
+  allBusinesses = JSON.parse(results);
   
   // Copy contents of allBusinesses to spinnerBusinesses
   spinnerBusinesses = allBusinesses.slice();
