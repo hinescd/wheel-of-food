@@ -20,6 +20,10 @@ function reset() {
 }
 
 function init() {
+  // Make sure we're using https so chrome will let us use geolocation
+  if(window.location.protocol != "https:" && window.location.hostname != "localhost") {
+    window.location.protocol = "https:";
+  }
   canvas = document.getElementById("cvs");
   context = canvas.getContext("2d");
   context.font = "24px sans-serif";
