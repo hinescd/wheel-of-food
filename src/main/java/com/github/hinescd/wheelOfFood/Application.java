@@ -30,6 +30,10 @@ public class Application {
 			return null;
 		}
 		
+		parameterMap.put("categories", "restaurants");
+		parameterMap.put("sort_by", "rating");
+		parameterMap.put("limit", "50");
+		
 		AccessToken accessToken = getAccessToken();
 		
 		HttpHeaders headers = new HttpHeaders();
@@ -39,7 +43,7 @@ public class Application {
 		for(String key : parameterMap.keySet()) {
 			url += key + "=" + parameterMap.get(key) + "&";
 		}
-		url = url.substring(0, url.length() - 1);
+		url = url.substring(0, url.length() -1);
 		
 		HttpEntity<Object> requestEntity = new HttpEntity<Object>(headers);
 		
