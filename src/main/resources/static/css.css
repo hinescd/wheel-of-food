@@ -3,6 +3,16 @@ canvas {
   margin-right: auto;
 }
 
+button {
+  margin-top: 10px;
+  background-color: #00aa22;
+  border: 1px solid #000000;
+}
+
+button:disabled {
+  background-color: #005511;
+}
+
 #search {
   margin: 10px;
 }
@@ -12,4 +22,14 @@ canvas {
   width: 25vw;
   height: 98vh;
   background-color: #00ff80;
+}
+
+#searchButton {
+  width: 100%;
+  height: 50px;
+}
+
+#spinButton {
+  width: 100%;
+  height: 35px;
 }
