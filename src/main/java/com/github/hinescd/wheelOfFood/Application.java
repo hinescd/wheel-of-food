@@ -31,8 +31,12 @@ public class Application {
 		}
 		
 		parameterMap.put("categories", "restaurants");
-		parameterMap.put("sort_by", "rating");
 		parameterMap.put("limit", "50");
+		if(parameterMap.containsKey("term")) {
+			parameterMap.put("sort_by", "best_match");
+		} else {
+			parameterMap.put("sort_by", "rating");
+		}
 		
 		AccessToken accessToken = getAccessToken();
 		
