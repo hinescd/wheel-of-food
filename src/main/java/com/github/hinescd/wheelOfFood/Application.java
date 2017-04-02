@@ -49,9 +49,13 @@ public class Application {
 		
 		RestTemplate restTemplate = new RestTemplate();
 		
-		SearchResults request = restTemplate.exchange(url, HttpMethod.GET, requestEntity, SearchResults.class).getBody();
-		
-		return request.getBusinesses();
+		try {
+			SearchResults request = restTemplate.exchange(url, HttpMethod.GET, requestEntity, SearchResults.class).getBody();
+			return request.getBusinesses();
+		} catch(Exception e) {
+			e.printStackTrace();
+			return new ArrayList<Business>();
+		}
 	}
 
 	public static void main(String[] args) {
