@@ -46,7 +46,8 @@ function init() {
   reset();
   spinning = false;
   document.getElementById("spinButton").disabled="true";
-  context.fillText("Nothing to display", 250, 250);
+  var width = context.measureText("Nothing to display").width;
+  context.fillText("Nothing to display", 250 - width/2, 260);
   if(navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(setLocation);
   } else {
@@ -107,7 +108,8 @@ function search() {
   xmlHttp.open("GET", url, true);
   xmlHttp.send(null);
   reset();
-  context.fillText("Loading...", 250, 250);
+  var width = context.measureText("Loading...").width;
+  context.fillText("Loading...", 250 - width/2, 260);
   document.getElementById("searchButton").disabled="true";
   document.getElementById("spinButton").disabled="true";
 }
