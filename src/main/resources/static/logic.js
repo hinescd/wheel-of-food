@@ -9,6 +9,22 @@ var context;
 var loc;
 var colors = ["#0080ff", "#00ff00", "#00ffff", "#ff0000", "#ff00ff"];
 
+function showDetails(business) {
+  var detailsPane = document.getElementById("detailsPane");
+  detailsPane.innerHTML = "<a href=\"" + business.url + "\" class=\"name\">" + business.name + "</a>";
+  if(business.price !== null) {
+    document.getElementsByClassName("name")[0].innerHTML += " - (" + business.price + ")";
+  }
+  for(var i = 0; i < business.location.display_address.length; i++) {
+    detailsPane.innerHTML += "<p class=\"address\">" + business.location.display_address[i] + "</p>";
+  }
+  detailsPane.innerHTML += "<p class=\"phone\">" + business.display_phone + "</p>";
+  detailsPane.innerHTML += "<img src=\"" + business.rating + ".png\" class=\"rating\" />";
+  detailsPane.innerHTML += "<a href=\"" + business.url + "\" class=\"yelpLink\"><img src=\"Yelp_trademark_RGB_outline.png\" width=\"75px\" /></a>";
+  detailsPane.innerHTML += "<p class=\"reviewCount\">" + business.review_count + " reviews</p>";
+  detailsPane.innerHTML += "<img src=\"" + business.image_url + "\" width=\"300px\" class=\"image\" />";
+}
+
 function setLocation(position) {
   loc = position;
 }
@@ -33,10 +49,14 @@ function init() {
   context.fillText("Nothing to display", 250, 250);
   if(navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(setLocation);
+  } else {
+    document.getElementById("useCurrentLocation").checked = false;
+    document.getElementById("useCurrentLocation").disabled = true;
   }
 }
 
 function search() {
+  document.getElementById("detailsPane").innerHTML = "";
   var url = "/search";
   if(document.getElementById("useCurrentLocation").checked) {
     if(loc === undefined) {
@@ -112,7 +132,7 @@ function drawSpinner(timestamp) {
     context.fillStyle = colors[i % colors.length];
     context.beginPath();
     context.moveTo(0, 0);
-    context.arc(0, 0, 240, -Math.PI/displayNames.length, Math.PI/displayNames.length);
+    context.arc(0, 0, 245, -Math.PI/displayNames.length, Math.PI/displayNames.length);
     context.lineTo(0, 0);
     context.fill();
     context.stroke();
@@ -120,17 +140,16 @@ function drawSpinner(timestamp) {
     context.fillStyle = "#000000";
     var name = displayNames[i];
     var width = context.measureText(name).width;
-    context.fillText(name, 237 - width, 10);
+    context.fillText(name, 242 - width, 10);
     angularVelocity = Math.max(0, angularVelocity + angularAcceleration/60);
     context.rotate(2*Math.PI/displayNames.length);
   }
+  showDetails(getSelectedBusiness());
   var nextFrame = window.requestAnimationFrame(drawSpinner);
   if(angularVelocity <= 0) {
     window.cancelAnimationFrame(nextFrame);
     document.getElementById("spinButton").removeAttribute("disabled");
     document.getElementById("searchButton").removeAttribute("disabled");
-    //console.log(spinnerBusinesses[(spinnerBusinesses.length - Math.round(spinnerBusinesses.length*(rotation % (2*Math.PI))/(2*Math.PI))) % spinnerBusinesses.length].name);
-    console.log(getSelectedBusiness());
   }
 }
 
@@ -143,7 +162,7 @@ function initSpinner() {
     for(var i = 0; i < spinnerBusinesses.length; i++) {
       var name = spinnerBusinesses[i].name;
       var width = context.measureText(name).width;
-      while(width > 202) {
+      while(width > 207) {
         name = name.substring(0, name.length - 4) + "...";
         width = context.measureText(name).width;
       }
