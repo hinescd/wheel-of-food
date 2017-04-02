@@ -7,7 +7,15 @@ var angularAcceleration;
 var canvas;
 var context;
 var loc;
+var nextFrame;
 var colors = ["#0080ff", "#00ff00", "#00ffff", "#ff0000", "#ff00ff"];
+
+function stopSpin() {
+  window.cancelAnimationFrame(nextFrame);
+  document.getElementById("spinButton").removeAttribute("disabled");
+  document.getElementById("searchButton").removeAttribute("disabled");
+  document.getElementById("stopSpinButton").disabled = "true";
+}
 
 function useCurrentLocationChanged() {
   if(document.getElementById("useCurrentLocation").checked) {
@@ -58,13 +66,14 @@ function init() {
   reset();
   spinning = false;
   document.getElementById("spinButton").disabled="true";
+  document.getElementById("stopSpinButton").disabled = "true";
   var width = context.measureText("Nothing to display").width;
   context.fillText("Nothing to display", 250 - width/2, 260);
   if(navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(setLocation);
   } else {
     document.getElementById("useCurrentLocation").checked = false;
-    document.getElementById("useCurrentLocation").disabled = true;
+    document.getElementById("useCurrentLocation").disabled = "true";
   }
 }
 
@@ -136,6 +145,7 @@ function getSelectedBusiness() {
 function spin() {
   document.getElementById("spinButton").disabled="true";
   document.getElementById("searchButton").disabled="true";
+  document.getElementById("stopSpinButton").removeAttribute("disabled");
   angularVelocity = 10 + Math.random() * 25;
   angularAcceleration = -1;
   window.requestAnimationFrame(drawSpinner);
@@ -162,11 +172,9 @@ function drawSpinner(timestamp) {
     context.rotate(2*Math.PI/displayNames.length);
   }
   showDetails(getSelectedBusiness());
-  var nextFrame = window.requestAnimationFrame(drawSpinner);
+  nextFrame = window.requestAnimationFrame(drawSpinner);
   if(angularVelocity <= 0) {
-    window.cancelAnimationFrame(nextFrame);
-    document.getElementById("spinButton").removeAttribute("disabled");
-    document.getElementById("searchButton").removeAttribute("disabled");
+    stopSpin();
   }
 }
 

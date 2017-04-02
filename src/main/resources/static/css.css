@@ -103,6 +103,13 @@ button:disabled {
 }
 
 #spinButton {
-  width: 100%;
+  width: calc(50% - 5px);
   height: 35px;
+  float: left;
+}
+
+#stopSpinButton {
+  width: calc(50% - 5px);
+  height: 35px;
+  float: right;
 }
