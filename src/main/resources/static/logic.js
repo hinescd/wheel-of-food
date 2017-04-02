@@ -31,14 +31,14 @@ function setLocation(position) {
 
 function reset() {
   rotation = 0;
-  context.resetTransform();
+  context.setTransform(1, 0, 0, 1, 0, 0);
   context.clearRect(0, 0, 500, 500);
 }
 
 function init() {
   // Make sure we're using https so chrome will let us use geolocation
   if(window.location.protocol != "https:" && window.location.hostname != "localhost") {
-    window.location.protocol = "https:";
+    window.location.href = "https://wheel-of-food.herokuapp.com/";
   }
   canvas = document.getElementById("cvs");
   context = canvas.getContext("2d");
@@ -75,7 +75,7 @@ function search() {
     }
   }
   if(document.getElementById("radius").value !== "") {
-    url += "&radius=" + (parseInt(document.getElementById("radius").value) * 1609);
+    url += "&radius=" + Math.round(parseInt(document.getElementById("radius").value) * 1609.344);
   }
   if(document.getElementById("openNow").checked) {
     url += "&open_now=true";
