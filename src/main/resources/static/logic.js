@@ -98,6 +98,9 @@ function search() {
   if(prices.length > 0) {
     url += "&price=" + prices.toString();
   }
+  if(document.getElementById("term").value.trim().length > 0) {
+    url += "&term=" + document.getElementById("term").value.trim();
+  }
   
   var xmlHttp = new XMLHttpRequest();
   xmlHttp.onreadystatechange = function() {
