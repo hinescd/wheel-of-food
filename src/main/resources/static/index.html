@@ -9,9 +9,11 @@
 	  <div id="sidebar">
 	    <div id="search">
   	    Location:<br />
-  	    <input type="checkbox" name="useCurrentLocation" id="useCurrentLocation" checked /><label for="useCurrentLocation">Current location</label>
+  	    <input type="checkbox" name="useCurrentLocation" id="useCurrentLocation" onchange="useCurrentLocationChanged()" checked /><label for="useCurrentLocation">Current location</label>
   	    <br />
-  	    <input type="text" name="location" id="location" placeholder="city, state" />
+  	    --OR--
+  	    <br />
+  	    <input type="text" name="location" id="location" placeholder="city, state" oninput="locationChanged()" />
   	    <br />
   	    <br />
   	    Keyword:<br />

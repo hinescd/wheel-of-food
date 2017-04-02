@@ -9,6 +9,18 @@ var context;
 var loc;
 var colors = ["#0080ff", "#00ff00", "#00ffff", "#ff0000", "#ff00ff"];
 
+function useCurrentLocationChanged() {
+  if(document.getElementById("useCurrentLocation").checked) {
+    document.getElementById("location").value = "";
+  }
+}
+
+function locationChanged() {
+  if(document.getElementById("location").value !== "") {
+    document.getElementById("useCurrentLocation").checked = false;
+  }
+}
+
 function showDetails(business) {
   var detailsPane = document.getElementById("detailsPane");
   detailsPane.innerHTML = "<a href=\"" + business.url + "\" class=\"name\">" + business.name + "</a>";
